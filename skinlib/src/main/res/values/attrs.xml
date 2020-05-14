@@ -2,4 +2,5 @@
 <resources>
 
     <attr name="skin_enable" format="boolean" />
+    <attr name="tag" format="boolean" />
 </resources>
