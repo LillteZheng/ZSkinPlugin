@@ -20,7 +20,7 @@ implementation 'com.github.LillteZheng:ZSkinPlugin:v1.0'
 
 效果如下：
 
-<img src="https://github.com/LillteZheng/ZSkinPlugin/raw/master/pic/skin.png"  width="410" height="660">
+![](https://github.com/LillteZheng/ZSkinPlugin/blob/master/app/pic/skin.gif)
 
 
 
@@ -30,7 +30,7 @@ ZSkinPlugin 目前支持应用内换肤和插件换肤。
 这里介绍插件换肤的制作。新建一个moudle，不需要 activity；然后再 res 相同的文件夹下，导入你的皮肤资源，比如：
 
 
-<img src="https://github.com/LillteZheng/ZSkinPlugin/raw/master/pic/skin.png"  width="480" height="510">
+<img src="https://github.com/LillteZheng/ZSkinPlugin/blob/master/app/pic/skin.png"  width="480" height="510">
 
 然后生成apk包即可，为了避免冲突，建议对 apk 命名成 x.skin ，然后放到指定的路径下即可。
 
