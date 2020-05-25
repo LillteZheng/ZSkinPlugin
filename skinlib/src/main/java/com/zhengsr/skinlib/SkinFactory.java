@@ -1,23 +1,17 @@
 package com.zhengsr.skinlib;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.zhengsr.skinlib.emtity.ConfigBean;
-import com.zhengsr.skinlib.emtity.SkinAttr;
-import com.zhengsr.skinlib.parse.ParseConsumer;
+import com.zhengsr.skinlib.utils.LggUtils;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -25,10 +19,11 @@ import java.util.Map;
  * @author by  zhengshaorui on 2019/9/6
  * Describe: 皮肤管理类
  */
-public class SkinFactory implements LayoutInflater.Factory2 {
+class SkinFactory implements LayoutInflater.Factory2 {
 
-    private Activity mActivity;
-    private ConfigBean mBean;
+    private LayoutInflater.Factory mViewCreateFactory;
+    private LayoutInflater.Factory2 mViewCreateFactory2;
+
     private static final Map<String, Constructor<? extends View>> sConstructorMap
             = new ArrayMap<>();
 
@@ -42,44 +37,39 @@ public class SkinFactory implements LayoutInflater.Factory2 {
             Context.class, AttributeSet.class};
 
 
-    private static final SkinFactory INSTANCE = new SkinFactory();
 
-    public static SkinFactory get(){
-        return INSTANCE;
+
+    public void setInterceptFactory(LayoutInflater.Factory factory) {
+        mViewCreateFactory = factory;
+    }
+
+    public void setInterceptFactory2(LayoutInflater.Factory2 factory2) {
+        mViewCreateFactory2 = factory2;
     }
 
 
-    public SkinFactory factory(Activity activity){
-        mActivity = activity;
-        mBean = new ConfigBean();
-        return this;
-    }
 
-
-
-    public SkinFactory loadSkinNow(String skinPath){
-        mBean.skinPath = skinPath;
-        return this;
-    }
-
-    public void load(){
-        LayoutInflater layoutInflater = mActivity.getLayoutInflater();
-        layoutInflater.setFactory2(this);
-    }
 
 
     @Override
-    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        View view = null;
         //找到需要换肤的类
         if (isSkinEnable(attrs)) {
             //首先先拿到 view
-            View view = null;
+
             /**
-             * 由于 appcompatactivity 本身就有实现 factory 的功能,且里面的view，有appcompat的一些属性，这里保留着
+             * 防止与其他库冲突，比如替换字体等
              */
-            if (mActivity instanceof AppCompatActivity) {
-                AppCompatDelegate delegate = ((AppCompatActivity) mActivity).getDelegate();
-                view = delegate.createView(parent, name, context, attrs);
+            if (mViewCreateFactory2 != null){
+                view = mViewCreateFactory2.onCreateView(name,context,attrs);
+                if (view == null) {
+                    view = mViewCreateFactory2.onCreateView(null,name,context,attrs);
+                }
+            }
+
+            if (mViewCreateFactory != null){
+                view = mViewCreateFactory.onCreateView(name,context,attrs);
             }
 
             if (view == null) {
@@ -90,17 +80,8 @@ public class SkinFactory implements LayoutInflater.Factory2 {
                 //开始解析view
                 parseSkinAttr(view,attrs);
             }
-            return view;
-
         }
-        return null;
-    }
-
-
-    @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-
-        return null;
+        return view;
     }
 
 
@@ -118,12 +99,12 @@ public class SkinFactory implements LayoutInflater.Factory2 {
             tagNames = tags.trim().split("\\|");
         }
 
-        HashMap<String, SkinAttr> attrHashMap = ParseConsumer.parseSkinAttr(view, attrs, tagNames);
+      //  HashMap<String, SkinAttr> attrHashMap = ParseConsumer.parseSkinAttr(view, attrs, tagNames);
 
 
         //拿到属性之后，保存一个view 对应的 属性值
 
-        SkinManager.get().config(mActivity).saveViewAttr(view,attrHashMap,mBean);
+        SkinManager.get().parseViewAttr(view,attrs,tagNames);
 
 
     }
@@ -131,7 +112,7 @@ public class SkinFactory implements LayoutInflater.Factory2 {
 
     /**
      * 需要在 xml 中，先设置     xmlns:skin="http://schemas.android.com/android/skin"
-     * 然后在需要的空间中，设置 skin:skin_enable = "true";
+     * 然后在需要的空间中，设置 skin:enable = "true";
      *
      * @param attrs
      * @return
@@ -210,13 +191,9 @@ public class SkinFactory implements LayoutInflater.Factory2 {
     }
 
 
-    public static void loadSkin(String skinPath){
-        SkinManager.get().loadSkin(skinPath);
-    }
 
-    public void changeSkin() {
-        if (mBean != null) {
-           // SkinManager.get().loadSkin();
-        }
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+       return onCreateView(name,context,attrs);
     }
 }

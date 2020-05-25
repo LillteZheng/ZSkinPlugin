@@ -18,19 +18,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Hello World!"
-        skin:skin_enable = "true"
+        skin:enable = "true"
         android:background="@color/colorPrimary"
         android:textColorHint="@color/colorPrimaryDark"
         android:textColor="@color/colorAccent"
         />
 
+
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
-        skin:skin_enable = "true"
+        skin:enable = "true"
         android:layout_marginTop="10dp"
         android:textColor="@color/colorAccent"
         />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        skin:enable = "true"
+        android:src="@mipmap/skin_bg"/>
 
 </LinearLayout>

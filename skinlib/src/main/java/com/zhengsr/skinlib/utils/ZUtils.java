@@ -4,6 +4,15 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Looper;
+import android.util.Log;
+
+import java.io.BufferedOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author by  zhengshaorui on 2019/9/6
@@ -60,5 +69,58 @@ public class ZUtils {
             return info.packageName;
         }
         return null;
+    }
+
+
+    /**
+     * 关闭可关闭的流
+     * @param closeables
+     */
+    public static void close(Closeable... closeables){
+        if (closeables != null) {
+            for (Closeable closeable : closeables) {
+                try {
+                    closeable.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void  copyAssetFileToStorage(Context context, String assetName, String path,String name){
+        InputStream open = null;
+        BufferedOutputStream bos = null;
+        try {
+            open = context.getAssets().open(assetName);
+
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File file = new File(path,name);
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+
+
+            bos = new BufferedOutputStream(new FileOutputStream(file));
+
+            byte[] bytes = new byte[1024];
+
+            int len;
+            while ( (len = open.read(bytes)) != -1 ){
+                bos.write(bytes,0,len);
+            }
+
+            bos.flush();
+
+        } catch (IOException e) {
+            LggUtils.d("ZUtils - copyAssetFileToStorage: "+e.getMessage());
+            e.printStackTrace();
+        }finally {
+            ZUtils.close(open,bos);
+        }
     }
 }

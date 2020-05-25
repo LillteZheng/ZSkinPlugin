@@ -1,2 +1,2 @@
-include ':app', ':skinlib', ':skinres'
+include ':app', ':skinlib', ':skin_res'
 rootProject.name='ZSkinPlugin'

@@ -1,2 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zhengsr.skinlib" />
+    package="com.zhengsr.skinlib" >
+
+    <application>
+
+        <provider
+            android:name="com.zhengsr.skinlib.ZSkinContenProvider"
+            android:authorities="${applicationId}.zskin"
+            android:exported="false"
+            android:multiprocess="true"
+            />
+    </application>
+
+
+</manifest>

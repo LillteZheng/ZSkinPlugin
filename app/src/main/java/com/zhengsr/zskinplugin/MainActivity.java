@@ -6,27 +6,30 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.zhengsr.skinlib.ZSkin;
+import com.zhengsr.skinlib.utils.ZUtils;
 
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
-    String path = Environment.getExternalStorageDirectory().getAbsolutePath()+
-            File.separator+"skinres-release.apk";
-    String pkgName = "com.zhengsr.skinres";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-        ZSkin.setFactory(this)
-                .loadSkinNow(path)
-                .load();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
     }
 
     public void changeSkin(View view) {
-        ZSkin.changeSkin(path);
-       // SkinFactory.loadSkin(path,pkgName);
+        String path = getFilesDir().getAbsolutePath();
+        String name = "skin_res-release.skin";
+        String assetName = "skin/skin_res-release.skin";
+        File file = new File(path,name);
+        if (!file.exists()) {
+            ZUtils.copyAssetFileToStorage(this,assetName,path,name);
+        }
+
+        ZSkin.loadSkin(file.getAbsolutePath());
     }
 }
