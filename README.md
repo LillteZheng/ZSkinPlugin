@@ -67,12 +67,12 @@ ZSkinPlugin 目前支持应用内换肤和插件换肤。
 ```
 
 其中为什么要加   skin:tag="src"  呢？如果不加 tag，则工具会遍历所有的属性，比如 textColor;所以，这里我们只需要
-指定更新背景 background 即可。如果不写，当也检测到 colorPrimaryDark 资源，也会替换掉  textColor。
+指定更新背景 background 即可。如果不写，如果在皮肤包中检测到 colorPrimaryDark 资源，也会替换掉  textColor。
 
 
 ### 3.1 动态替换
 
-比如一个 dialog，用 recyclerview 去加载空间，由于不在 xml 中配置的，那肯定是不行，所以这里也支持动态替换。
+比如一个 dialog，用 recyclerview 去加载控件，由于不在 xml 中配置的，那肯定是不行，所以这里也支持动态替换。
 比如：
 ```
 //前提你已经配置了 ZSkin.loadSkin(file.getAbsolutePath());
@@ -155,3 +155,7 @@ if (!DrawConfig.isV811()) {
 
 }
 ```
+
+**缺点:**
+
+-  目前看，ZSkinPlugin 暂不支持控件theme 设置的 style 属性，写是可以写的，就是要定义很多类，后面再看看有没有办法优化
