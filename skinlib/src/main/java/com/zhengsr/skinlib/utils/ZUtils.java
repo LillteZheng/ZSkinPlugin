@@ -80,7 +80,9 @@ public class ZUtils {
         if (closeables != null) {
             for (Closeable closeable : closeables) {
                 try {
-                    closeable.close();
+                    if (closeable != null) {
+                        closeable.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

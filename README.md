@@ -12,7 +12,7 @@ allprojects {
 }
 ```
 ```
-implementation 'com.github.LillteZheng:ZSkinPlugin:v1.0'
+implementation 'com.github.LillteZheng:ZSkinPlugin:v1.2'
 ```
 
 
@@ -81,6 +81,8 @@ if (ZSkin.isLoadSkin()){
 }
 ```
 
+**如果你使用了 glide，记得先清掉缓存**
+
 ### 3.2 自定义控件
 
 比如，我有一个自定义控件，那怎么替换呢？很简单，xml 也使用  skin:enable="true" 去配置，比如：
@@ -117,7 +119,7 @@ public class BottomImgDelegate extends ICusSkinDelegate<BottomItemView> {
         for (Map.Entry<String, SkinAttr> entry : entrySet) {
             String key = entry.getKey();
             SkinAttr attr = entry.getValue();
-            if (getResId(attr) != 0) {
+            if (hasResource(attr)) {
                 if ("bt_img_src".equals(key)){
                     //替换皮肤的
                     view.updateImg(getDrawable(attr));

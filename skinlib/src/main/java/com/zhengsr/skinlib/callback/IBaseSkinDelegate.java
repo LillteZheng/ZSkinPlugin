@@ -28,6 +28,10 @@ public abstract class IBaseSkinDelegate<T extends View,E> {
         return 0;
     }
 
+    public boolean hasResource(SkinAttr attr){
+        return getResId(attr) != 0;
+    }
+
     public int getColor(SkinAttr attr){
         int resId =  resource.getIdentifier(attr.entryName,attr.typeName,pkgName);
         if (resId != 0){

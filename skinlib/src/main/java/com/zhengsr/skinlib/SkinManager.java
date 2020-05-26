@@ -154,7 +154,6 @@ class SkinManager {
         this.isChangeNow = true;
 
         mPkgName = ZUtils.getPkgName(mContext, skinPath);
-        LggUtils.d("SkinManager - loadSkin: "+mPkgName);
         mPluginPath = skinPath;
         mResources = getResource();
         notifyChangeSkin();
