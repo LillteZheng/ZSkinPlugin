@@ -314,9 +314,10 @@ class SkinManager {
 
             AssetManager assetManager = AssetManager.class.newInstance();
 
-            Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
+            Method addAssetPath = AssetManager.class.getMethod("addAssetPath", String.class);
             addAssetPath.setAccessible(true);
             addAssetPath.invoke(assetManager, skinPath);
+
             Resources resources = new Resources(assetManager, mContext.getResources().getDisplayMetrics()
                     , mContext.getResources().getConfiguration());
 

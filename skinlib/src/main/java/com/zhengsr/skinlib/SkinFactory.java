@@ -109,7 +109,6 @@ class SkinFactory implements LayoutInflater.Factory2 {
 
     }
 
-
     /**
      * 需要在 xml 中，先设置     xmlns:skin="http://schemas.android.com/android/skin"
      * 然后在需要的空间中，设置 skin:enable = "true";
